@@ -1,0 +1,9 @@
+version: "3.2"
+
+services:
+  app:
+    volumes:
+      - "docker_symfony_sync:/app:nocopy"
+
+volumes:
+    docker_symfony_sync:

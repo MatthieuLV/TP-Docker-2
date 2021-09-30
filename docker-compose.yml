@@ -1,0 +1,59 @@
+version: '3.4'
+
+services:
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        ports:
+        - "8080:80"
+        volumes:
+        - ./docker/dev/phpmyadmin/php.ini:/usr/local/etc/php/php.ini
+        depends_on:
+        - db
+        networks:
+        - "docker_symfony_network"
+        environment:
+            UPLOAD_LIMIT: 512M
+            MAX_EXECUTION_TIME: 300
+
+    db:
+        image: mysql:8.0
+        restart: always
+        command: --max_allowed_packet=32505856
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: dockersymfonybdd
+            MYSQL_USER: dockersymfony
+            MYSQL_PASSWORD: dockersymfony
+        networks:
+        - "docker_symfony_network"
+
+    app:
+        build: docker/dev/app
+        ports:
+        - "80:80"
+        volumes:
+        - "./:/app"
+        restart: always
+        networks:
+            docker_symfony_network:
+                aliases:
+                    - docker-symfony.local
+        environment:
+        - HTTPS_METHOD=noredirect
+        depends_on:
+        - db
+        env_file:
+        - .env
+
+    mailcatcher:
+        image: schickling/mailcatcher:latest
+        ports:
+        - "1080:1080"
+        networks:
+            docker_symfony_network:
+                aliases:
+                - mailcatchersmtp
+
+networks:
+    docker_symfony_network:
+        driver: bridge

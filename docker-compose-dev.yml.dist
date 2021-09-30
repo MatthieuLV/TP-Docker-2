@@ -1,0 +1,30 @@
+# This file override the default configuration ;
+# Please copy this file as docker-compose-dev.yml ;
+# Then configure the file as you need.
+
+version: "3.2"
+
+services:
+  app:
+    ports:
+      - "80:80"
+      - "8081:8081"
+      - "443:443"
+    env_file:
+      - .env
+
+  phpmyadmin:
+    ports:
+      - "8080:80"
+
+  mailcatcher:
+    image: schickling/mailcatcher:latest
+    ports:
+      - "1080:1080"
+    networks:
+        docker_symfony_network:
+            aliases:
+              - mailcatchersmtp
+
+volumes:
+  socket_dir:
