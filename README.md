@@ -4,6 +4,15 @@
 
 Subject link : https://gist.github.com/capywebformations/0c713df3552d664250799290cabf3d0f 
 
+## Technos
+
+- Docker
+- Symfony (PHP)
+- Javascript
+- Mailcatcher
+- MySql
+- Webpack Encore
+
 ## Install project
 
 1. Get sources
