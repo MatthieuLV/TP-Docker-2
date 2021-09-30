@@ -6,9 +6,9 @@ ENVIRONMENT=$(shell bash ./scripts/get-env.sh)
 SHELL := /bin/bash
 MUTAGEN_NAME=$(shell bash ./scripts/get-mutagen-name.sh)
 
-.PHONY: start up perm db cc ssh vendor assets assets-watch stop rm
+.PHONY: start up perm db cc ssh vendor stop rm
 
-start: up perm vendor assets db cc perm
+start: up perm vendor db cc perm
 
 up:
 	docker kill $$(docker ps -q) || true
@@ -61,7 +61,6 @@ db: wait-for-db
 	$(EXEC) bin/console doctrine:database:create --if-not-exists
 	$(EXEC) bin/console doctrine:schema:update --force
 	$(EXEC) rm -rf public/uploads/*
-	$(EXEC) bin/console doctrine:fixtures:load -n
 
 db-migrate:
 	$(EXEC) bin/console doctrine:migration:migrate
