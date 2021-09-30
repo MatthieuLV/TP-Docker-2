@@ -90,18 +90,6 @@ cc:
 	$(EXEC) bin/console c:cl --no-warmup
 	$(EXEC) bin/console c:warmup
 
-# Fixer
-php-cs-fixer:
-	sh -c "COMPOSE_INTERACTIVE_NO_CLI=1 $(EXEC) php-cs-fixer fix --config=.php_cs"
-	sh -c "COMPOSE_INTERACTIVE_NO_CLI=1 $(EXEC) php-cs-fixer fix -v --dry-run --config=.php_cs"
-
 # Wait commands
 wait-for-db:
 	$(EXEC) php -r "set_time_limit(60);for(;;){if(@fsockopen(\"db\",3306)){break;}echo \"Waiting for DB\n\";sleep(1);}"
-
-update-prod:
-# Update cronjobs
-	rm -f var/cron/crontab.backup
-	mkdir -p var/cron
-	crontab -l > var/cron/crontab.backup
-	crontab cron/prod
