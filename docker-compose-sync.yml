@@ -1,9 +1,13 @@
 version: "3.2"
+#Version
 
+#Service declaration
 services:
+  #Service app
   app:
     volumes:
       - "docker_symfony_sync:/app:nocopy"
 
+#Volumes sync
 volumes:
     docker_symfony_sync:
