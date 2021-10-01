@@ -2,9 +2,12 @@
 # Please copy this file as docker-compose-dev.yml ;
 # Then configure the file as you need.
 
+# Version docker compose
 version: "3.2"
 
+# Declaration of services
 services:
+  # App service
   app:
     ports:
       - "80:80"
@@ -13,10 +16,12 @@ services:
     env_file:
       - .env
 
+  # Phpmyadmin service
   phpmyadmin:
     ports:
       - "8080:80"
 
+  # Mailcatcher service
   mailcatcher:
     image: schickling/mailcatcher:latest
     ports:
@@ -26,5 +31,6 @@ services:
             aliases:
               - mailcatchersmtp
 
+# Volumes
 volumes:
   socket_dir:

@@ -1,5 +1,7 @@
 FROM ubuntu:18.04
+#Version of ubuntu
 
+#Create variable with
 ENV LANG="en_US.UTF-8" \
     LC_ALL="en_US.UTF-8" \
     LANGUAGE="en_US.UTF-8" \
@@ -10,8 +12,10 @@ ENV LANG="en_US.UTF-8" \
     PHP_VERSION=7.4 \
     COMPOSER_VERSION=1.10.16
 
+#Working directory
 WORKDIR /app
 
+#Docker run of different apt
 RUN apt-get update -q && \
     apt-get install -qy software-properties-common language-pack-en-base && \
     export LC_ALL=en_US.UTF-8 && \
@@ -58,12 +62,6 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     apt-get update && \
     apt-get install -qy mysql-client
 
-# Install phpcsfixer
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O /tmp/php-cs-fixer && \
-    chmod a+x /tmp/php-cs-fixer && \
-    mv /tmp/php-cs-fixer /usr/local/bin/php-cs-fixer
-
 # Configuration files
 COPY php.ini /etc/php/${PHP_VERSION}/cli/conf.d/50-setting.ini
 COPY php.ini /etc/php/${PHP_VERSION}/fpm/conf.d/50-setting.ini
@@ -72,4 +70,5 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY symfony.conf /etc/nginx/symfony.conf
 
+#Command
 CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
