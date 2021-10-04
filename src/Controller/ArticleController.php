@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Form\ArticleType;
 use App\Form\SendEmailType;
+use Swift_Mailer;
 use App\Repository\ArticleRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -113,23 +114,26 @@ class ArticleController extends AbstractController
      * @return Response
      * @throws TransportExceptionInterface
      */
-    public function sendEmail(Article $article, Request $request, MailerInterface $mailer)
+    public function sendEmail(Article $article, Request $request, \Swift_Mailer $mailer)
     {
-        $form = new SendEmailType();
+        $form = $this->createForm(SendEmailType::class);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $email = (new TemplatedEmail())
-                ->from(new Address('contact@article.fr', 'Article.fr'))
-                ->to($form->getData()->getEmail())
-                ->subject($article->getTitle())
-                ->htmlTemplate('article/email.html.twig')
-                ->context([
-                    'article' => $article,
-                ])
-            ;
+            $message = (new \Swift_Message('Article'))
+                ->setFrom('contact@article.fr')
+                ->setTo($form->getData()['email'])
+                ->setBody(
+                    $this->renderView(
+                        'article/email.html.twig',
+                        [
+                            'article' => $article,
+                        ]
+                    ),
+                    'text/html'
+                );
 
-            $mailer->send($email);
+            $mailer->send($message);
         }
 
         return $this->render('article/send_email.html.twig', [
