@@ -40,7 +40,7 @@ Subject link : https://gist.github.com/capywebformations/0c713df3552d66425079929
 
 6. Go to 
 
-- https://tp-docker-symfony.localhost/ to see the project
+- http://tp-docker-symfony.localhost/ to see the project
     
 - http://tp-docker-symfony.localhost:8080 to see database (username: tp-docker, password: mw)
     
